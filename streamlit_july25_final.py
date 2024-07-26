@@ -87,8 +87,8 @@ if submitted:
                     book_df_result = book_df_result.fillna('')
                     st.dataframe(book_df_result)
                 except NameError:
-                    st.write("None found. Search terms may be incorrect.")
+                    st.write("None found. Search terms may be incorrect or insufficient.")
             except KeyError:
-                st.write("None found. Search terms may be incorrect.")
+                st.write("None found. Search terms may be incorrect or insufficient.")
     else:
         st.write("Please enter a search term.")
