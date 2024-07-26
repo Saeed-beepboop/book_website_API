@@ -41,9 +41,11 @@ def get_book_info(book_list:list, columns_of_interest:list):
             # Since some entries may be missing in the columns of interest,
             # I used "try-except" to handle exceptions.
             try:
-                book_dict[column] = book[column]
+                if column in pd.DataFrame(book_list).columns:
+                    book_dict[column] = book[column]
             except KeyError as e:
                 book_dict[column] = ''
+                # Error is minor, it can be recorded in the debug for future investigation.
                 logger.debug(f"Column of interest missing. Moving on...\n{str(e)}")
                 continue
         book_list_selected.append(book_dict)
