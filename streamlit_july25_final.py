@@ -1,15 +1,5 @@
 import streamlit as st
 
-import numpy as np
-import pandas as pd
-import requests
-import csv
-import numpy as np
-import pandas as pd
-import ast
-import seaborn as sns
-import matplotlib.pyplot as plt
-
 from functions import get_book_list, get_book_info, make_df
 
 st.markdown("""# Parse Virtual Bookstore
@@ -61,13 +51,15 @@ options =["key",
      "already_read_count"]
 
 params = st.multiselect(
-    'Select the parameter categories to search by', options) # Check the output type. Has to be list of strings
+    'Select the parameter categories to search by', options)
 
-user_text = st.text_area('Enter the search terms, in the same order as parameters chosen above, separated by comma') # Check the output type. Has to be list of strings
+user_text = st.text_area('Enter the search terms, in the same order as parameters chosen above, separated by comma')
 user_text = [item.strip() for item in user_text.split(',')]
 
 fields = st.multiselect(
     'Select the fields to include in the result - leave empty to view all of the fields', options)
+
+limit = st.slider('Number of entries to receive (max. 1000)', 1, 1000)
 
 submitted = st.button("Submit", key="submit_button")
 if submitted:
@@ -76,6 +68,9 @@ if submitted:
         parameters = {}
         for p, t in zip(params, user_text):
             parameters[p] = t
+
+        parameters['limit'] = limit
+
         if not fields:
                 fields = 'all'
         st.write("Results:")
@@ -86,14 +81,15 @@ if submitted:
             book_info_result = get_book_info(book_list_result, fields)
             try:
                 book_df_result = make_df(book_info_result, fields)
+                book_df_result.index = book_df_result.index + 1
                 for column in book_df_result.columns:
                     book_df_result[column] = book_df_result[column].astype(str)
                 try:
                     book_df_result = book_df_result.fillna('')
                     st.dataframe(book_df_result)
-                except NameError as e:
+                except NameError:
                     st.write("None found. Search terms may be incorrect.")
-            except KeyError as e:
+            except KeyError:
                 st.write("None found. Search terms may be incorrect.")
     else:
         st.write("Please enter a search term.")
