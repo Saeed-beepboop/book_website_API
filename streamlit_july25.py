@@ -66,7 +66,7 @@ options =["key",
      "already_read_count"]
 
 params = st.multiselect(
-    'Select the parameter category to search by', options) # Check the output type. Has to be list of strings
+    'Select the parameter categories to search by', options) # Check the output type. Has to be list of strings
 
 # Text input field
 user_text = st.text_area('Enter the search terms, in the same order as parameters chosen above, separated by comma') # Check the output type. Has to be list of strings
@@ -137,14 +137,17 @@ if submitted:
         # st.write(f'user_text type is {type(user_text)}')
         # st.write(f'params type is {type(params)}')
         # st.write(f'parameters are {parameters}')
-        st.write(f"Results:")
+        st.write("Results:")
 
         with st.spinner('Calculating...'):
             if fields == 'all':
                 fields = options
             book_list_result = get_book_list(parameters)
             book_info_result = get_book_info(book_list_result, fields)
-            book_df_result = make_df(book_info_result, fields)
+            try:
+                book_df_result = make_df(book_info_result, fields)
+            except KeyError as e:
+                st.write("Search term is not correct.")
             for column in book_df_result.columns:
 
                 # if book_df_result[column].dtype != 'O':
