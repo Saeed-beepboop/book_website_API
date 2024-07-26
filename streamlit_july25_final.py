@@ -5,7 +5,7 @@ from functions import get_book_list, get_book_info, make_df
 st.markdown("""# Parse Virtual Bookstore
 #### by providing search parameters and receive datasets
 #### Live Demo
-###### Source: https://openlibrary.org/""")
+####### Source: https://openlibrary.org/""")
 
 options =["key",
      "redirects",
@@ -59,7 +59,7 @@ user_text = [item.strip() for item in user_text.split(',')]
 fields = st.multiselect(
     'Select the fields to include in the result - leave empty to view all of the fields', options)
 
-limit = st.slider('Number of entries to receive (max. 1000)', 1, 1000)
+limit = st.slider('Select the number of entries to receive (max. 1000)', 1, 1000)
 
 submitted = st.button("Submit", key="submit_button")
 if submitted:
